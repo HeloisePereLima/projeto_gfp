@@ -46,7 +46,7 @@ const Login = ({navigation}) => {
                   style={styles.logo}
                   resizeMode="contain" />
           <Text style={styles.headerText}>GFP </Text>
-          <Text >Gestor Financeiro Pessoal </Text>
+          <Text style={styles.headerText}>Gestor Financeiro Pessoal </Text>
 
              <View style={styles.conteudoCorpo}>
                 <Text style={styles.texto}>Acesse sua conta</Text>
