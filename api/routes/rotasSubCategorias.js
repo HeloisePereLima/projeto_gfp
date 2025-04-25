@@ -94,6 +94,16 @@ class rotasSubCategorias{
     }
 
     }
+    static async deletar (req, res){
+        const {id} = req.params
+        try{
+            const subCategoria = await BD.query(`UPDATE subcategorias SET ativo = false WHERE id_categoria = $1`, [id] )
+            return res.status(200).json({message: "subCategoria desativada com sucesso"})
+        }catch(error){
+            res.status(500).json({message: "Erro ao deletar subCategoria", error: error.message}) 
+        }
+    }
+
 }
 
 export default rotasSubCategorias

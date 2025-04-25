@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt'
 class rotasCategorias{
     static async nova(req, res){
         const { nome, tipo_transacao, gasto_fixo, id_usuario } = req.body;
+
+        
         
         try{
             const categoria = await BD.query(`
@@ -99,7 +101,31 @@ class rotasCategorias{
             res.status(500).json({message: 'Erro ao listar as categorias por id', error: error.message})
         }
     }
-    
+    //filtrar por tipo de categoria 
+    static async filtrarCategoria(req, res){
+        //o valor será enviado por parametro na url, deve ser enviado dessa maneira 
+        // ?tipo_transacao=entrada
+        const { tipo_transacao } = req.query
+
+        try{
+            const filtros = [];
+            const valores = [];
+
+            if(tipo_transacao){
+                filtros.push(`tipo_transacao = $${valores.length + 1}`)
+                valores.push(tipo_transacao)
+            }
+            const query = `
+                SELECT * FROM categorias ${filtros.length ? `WHERE ${filtros.join(" AND ")} `:""} and ativo = true
+                ORDER BY id_categoria DESC
+                `
+
+                const resultado = await BD.query(query, valores)
+
+        }catch(error){
+
+        }
+    }
 }
 
 export default rotasCategorias

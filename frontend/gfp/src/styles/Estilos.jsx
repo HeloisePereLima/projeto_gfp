@@ -6,7 +6,7 @@ export const corFundo2 = '#00b4d8'
 
 
 const Estilos = {
-    consteudo: {
+    conteudo: {
         flex: 1,
         width: '100%',
         backgroundColor: corFundo
