@@ -19,11 +19,11 @@ app.get('/', (req, res) =>{
 
 //Rotas usuarios
 app.post ('/usuarios', rotasUsuarios.novoUsuario)
-app.put ('/usuarios/:id', rotasUsuarios.atualizarTodos)
+app.put ('/usuarios/:id', autenticarToken,rotasUsuarios.atualizarTodos)
 app.patch('/usuarios/:id', autenticarToken, rotasUsuarios.atualizar)
 app.delete('/usuarios/:id', autenticarToken, rotasUsuarios.deletar)
 app.get('/usuarios', autenticarToken, rotasUsuarios.listarUsuario)
-app.get('/usuarios/:id', rotasUsuarios.listarUsuarioPorId)
+app.get('/usuarios/:id', autenticarToken, rotasUsuarios.listarUsuarioPorId)
 app.post ('/usuarios/login', rotasUsuarios.login)
 
 
