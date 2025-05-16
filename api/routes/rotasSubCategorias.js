@@ -73,13 +73,12 @@ class rotasSubCategorias{
         valores.push(id_categoria);
     }
 
-   
     if(campos.length === 0 ){
         console.log('1')
         return res.status(400).json({message: 'Nenhum campo fornecido para atualizar'})
        
     }
-
+    
     const query = `UPDATE subcategorias SET ${campos.join(", ")} WHERE id_subcategoria = ${id} RETURNING *`
     const subCategoria = await BD.query(query, valores)
 
