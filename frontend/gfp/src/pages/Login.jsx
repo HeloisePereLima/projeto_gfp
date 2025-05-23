@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './Login.module.css';
+import styles from '../styles/Estilos';
 import logo from '../assets/logo2.png';
 import { enderecoServidor } from '../utils'
 import { useNavigate } from 'react-router-dom';

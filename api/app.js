@@ -7,14 +7,19 @@ import rotasSubCategorias from './routes/rotasSubCategorias.js'
 import rotasTransacoes from './routes/rotasTransacoes.js'
 import rotasContas from './routes/rotasContas.js'
 
+import swaggerUi from 'swagger-ui-express'
+import swaggerSpec from './swagger.js'
+
 const app = express()
 testarConexao()
 
 app.use(cors())
 app.use(express.json())
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup (swaggerSpec))
+
 app.get('/', (req, res) =>{
-    res.send('API Funcionando!')
+    res.redirect('/api-docs')
 })
 
 //Rotas usuarios
@@ -29,12 +34,12 @@ app.post ('/usuarios/login', rotasUsuarios.login)
 
 //rotas categorias
 app.post ('/categorias', autenticarToken, rotasCategorias.nova)
-app.get('/categorias/filtrarCategoria', rotasCategorias.filtrarCategoria)
+app.get('/categorias/filtrarCategoria', autenticarToken, rotasCategorias.filtrarCategoria)
 app.put('/categorias/:id', rotasCategorias.atualizarTodos)
 app.patch('/categorias/:id', rotasCategorias.atualizar)
 app.delete('/categorias/:id', rotasCategorias.deletar)
-app.get('/categorias', rotasCategorias.listar)
-app.get('/categorias/:id', rotasCategorias.listarPorId)
+app.get('/categorias', autenticarToken, rotasCategorias.listar)
+app.get('/categorias/:id', autenticarToken, rotasCategorias.listarPorId)
 
 
 //rotas subcategorias
@@ -63,7 +68,7 @@ app.post('/contas', rotasContas.nova)
 app.get('/contas/filtrarNome', rotasContas.filtrarNome)
 app.get('/contas', rotasContas.listar)
 app.get('/contas/:id', rotasContas.listarPorId)
-app.delete('/contas/:id',rotasContas.deletar)
+app.delete('/contas/:id', autenticarToken, rotasContas.deletar)
 app.put('/contas/:id', rotasContas.atualizarTodos)
 app.patch('/contas/:id', rotasContas.atualizar)
 

@@ -16,7 +16,7 @@ class rotasContas {
     }
     static async listar (req, res){
         try{
-         const contas = await BD.query('SELECT * FROM contas ')
+         const contas = await BD.query('SELECT * FROM contas where ativo = true')
              res.status(200).json(contas.rows);
         }catch(error){
              res.status(500).json({message: 'Erro ao listar as contas', error: error.message})
@@ -44,9 +44,11 @@ class rotasContas {
         const {id} = req.params
         const { nome, tipo_conta, saldo, ativo, conta_padrao } = req.body
 
+        console.log('ATUALIZANDO', id);
+        
         try{
             const conta = await BD.query(`
-                UPTADE contas SET nome = $1, tipo_conta = $2, saldo = $3, ativo = $4, conta_padrao =$5)`
+                UPDATE contas SET nome = $1, tipo_conta = $2, saldo = $3, ativo = $4, conta_padrao =$5 where id_conta= $6)`
                 [ nome, tipo_conta, saldo, ativo, conta_padrao, id])
 
             res.status(201).json('conta atualizadas')
