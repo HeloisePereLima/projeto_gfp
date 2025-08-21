@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react"
 import { UsuarioContext } from '../UsuarioConxtext'
 import { useNavigate, Link, Routes, Route, useLocation } from "react-router-dom"
 import DashBoard from "./DashBoard"
+import Contas from "./Contas"
 import logo from "../assets/logo2.png"
 import { MdAdd, MdCached, MdClose, MdCreditCard, MdGridView, MdLogout, MdOutlineLocalOffer, MdPeople, MdMenu } from 'react-icons/md';
 
@@ -135,6 +136,7 @@ export default function Principal(){
                     <Routes>
                         <Route path="/" element={<DashBoard />}/>
                         <Route path="/dashboard" element={<DashBoard />}/>
+                        <Route path="/Contas" element={<Contas />}/>
                     </Routes>
                 </main>
                 <div>
