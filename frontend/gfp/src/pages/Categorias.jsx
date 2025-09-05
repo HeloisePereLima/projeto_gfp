@@ -1,38 +1,36 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { UsuarioContext } from '../UsuarioConxtext'
-import { enderecoServidor } from '../utils'
-import { MdAdd, MdEdit, MdDelete, MdCreditCard, MdAccountBalance, MdEmail, MdFeaturedPlayList, MdAttachMoney, MdAutoGraph} from 'react-icons/md'
+import { enderecoServidor, iconesCategoria } from '../utils'
+import { MdAdd, MdEdit, MdDelete} from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import Estilos from "../styles/Estilos"
+import CategoriasModal from './CategoriasModal'
 
 
-export default function Contas() {
+export default function Categorias() {
     const { dadosUsuario, setDadosUsuario, carregando} = useContext(UsuarioContext)
     const [dadosLista, setDadosLista] = useState([]);
 
+    //variaveis para controle do modal
+    const [modalAberto, setModalAberto] = useState(false);
+    const [itemAlterar, setItemAlterar] = useState(null);
+
+    const fecharModal = () => {
+        setModalAberto(false)
+        setItemAlterar(null)
+        buscarDadosAPI()
+    }
+
+    const botaoAlterar = (item) => {
+        setItemAlterar(item)
+        setModalAberto(true)
+    }
+
     const navigate = useNavigate();
-
-    const iconesTipoConta = {
-        'CONTA_CORRENTE': <MdAccountBalance className='w-6 h-6'/>,
-        'POUPANCA': <MdEmail className='w-6 h-6'/>,
-        'CARTÃO_CREDITO': <MdCreditCard className='w-6 h-6'/>,
-        'CARTÃO_DEBITO': <MdFeaturedPlayList className='w-6 h-6'/>,
-        'DINHEIRO': <MdAttachMoney className='w-6 h-6'/>,
-        'INVESTIMENTO': <MdAutoGraph className='w-6 h-6'/>,
-    }
-
-    const nomesTipoConta = {
-        'CONTA_CORRENTE':  'Conta Corrente',
-        'POUPANCA': 'Poupança',
-        'CARTÃO_CREDITO': 'Cartão de credito',
-        'CARTÃO_DEBITO': 'Cartão de Debito',
-        'DINHEIRO': 'Dinheiro',
-        'INVESTIMENTO': 'Investimento',
-    }
 
     const buscarDadosAPI = async () =>{
             try{
-                const resposta = await fetch(`${enderecoServidor}/contas`,{
+                const resposta = await fetch(`${enderecoServidor}/categorias`,{
                     method:'GET',
                     headers:{
                         'Authorization': `Bearer ${dadosUsuario.token}`
@@ -54,9 +52,9 @@ export default function Contas() {
 
         const botaoExcluir = async (id) => {
             try{
-                if(!window.confirm("tem certeza que deseja excluir esta conta?"))return 
+                if(!window.confirm("tem certeza que deseja excluir esta categoria?"))return 
 
-                const resposta = await fetch(`${enderecoServidor}/contas/${id}`,{
+                const resposta = await fetch(`${enderecoServidor}/Categorias/${id}`,{
                     method:'DELETE',
                     headers: {
                         'Authorization': `Bearer ${dadosUsuario.token}`,
@@ -73,17 +71,19 @@ export default function Contas() {
 
         const exibirItemLista = (item) => {
             return(
-                <div key={item.id_conta} className={Estilos.linhaListagem}>
-                    <div className='p-2 bg-cyan-100 text-cyan-700 rounded-full'>
-                        { iconesTipoConta[item.tipo_conta] }
+                <div key={item.id_categoria} className={Estilos.linhaListagem}>
+                    <div className='p-2 text-white rounded-full' style={{backgroundColor: item.cor}}>
+                        { iconesCategoria[item.icone] }
                     </div>
                     <div className='flex-1 ml-4'>
                         <p className='font-bold text-gray-800'>{item.nome}</p>
-                        <p className='text-sm text-gray-500'>{nomesTipoConta[item.tipo_conta]}</p>
+                         <span className={`text-xs font-semibold px-2 py-1 rounded-full ${item.tipo_transacao == "SAIDA" ? 'bg-red-200 text-red-800' : 'bg-green-200 text-green-800'}`}>
+                            {item.tipo_transacao}
+                         </span>
                     </div>
                     <div className='flex items-center space-x-2'>
-                        <button className={Estilos.botaoAlterar} onClick={() => navigate('/cadcontas', { state:{ itemAlterar: item } } )}> <MdEdit className='h-6 w-6'/> </button>
-                        <button className={Estilos.botaoExcluir} onClick={() => botaoExcluir(item.id_conta)}> <MdDelete className='h-6 w-6'/> </button>
+                        <button className={Estilos.botaoAlterar} onClick={() => botaoAlterar(item)}> <MdEdit className='h-6 w-6'/> </button>
+                        <button className={Estilos.botaoExcluir} onClick={() => botaoExcluir(item.id_categoria)}> <MdDelete className='h-6 w-6'/> </button>
                     </div>
                 </div>
             )
@@ -91,12 +91,12 @@ export default function Contas() {
 
     return (
         <div>
-            <p className='text-3xl font-bold mb-6'>Contas</p>
+            <p className='text-3xl font-bold mb-6'>Categorias</p>
             <section className='bg-white p-4 rounded-lg shadow-md'>
                 <div className='flex justify-between items-center mb-4'>
-                    <h3 className='text-xl font-bold text-gray-800'>Gerenciar Contas</h3>
-                    <button onClick={() => navigate('/cadContas')} className={Estilos.botaoCadastro} >
-                        <MdAdd className='h-8 w-8'/> Nova Conta 
+                    <h3 className='text-xl font-bold text-gray-800'>Gerenciar Categorias</h3>
+                    <button onClick={() => setModalAberto(true)} className={Estilos.botaoCadastro} >
+                        <MdAdd className='h-8 w-8'/> Nova Categoria 
                     </button>
                 </div>
                   {/* Listas das contas cadastradas */}
@@ -105,6 +105,11 @@ export default function Contas() {
                   </section>
             </section>
 
+            <CategoriasModal
+                modalAberto={modalAberto}
+                fecharModal={fecharModal}
+                itemAlterar={itemAlterar}
+            />
           
         </div>
     )

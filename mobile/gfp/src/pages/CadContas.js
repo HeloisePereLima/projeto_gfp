@@ -33,7 +33,7 @@ export default function CadContas({ navigation, route }){
             setUsuario(JSON.parse(usuarioLogado));
         }else {
             navigation.navigate('Login')
-        }
+        } 
         }
 
         const botaoSalvar = async () => {
@@ -45,7 +45,7 @@ export default function CadContas({ navigation, route }){
                 conta_padrao: inputContaPadrao,
                 ativo: true
             }
-            let endpoint = `${enderecoServidor}/contas`
+           let endpoint = `${enderecoServidor}/contas`
             let metodo = 'POST'
     
             if (route.params && route.params.Conta){

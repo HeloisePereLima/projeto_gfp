@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import { UsuarioContext } from '../UsuarioConxtext'
 import { useNavigate, Link, Routes, Route, useLocation } from "react-router-dom"
 import DashBoard from "./DashBoard"
 import Contas from "./Contas"
+import CadContas from "./CadContas"
 import logo from "../assets/logo2.png"
 import { MdAdd, MdCached, MdClose, MdCreditCard, MdGridView, MdLogout, MdOutlineLocalOffer, MdPeople, MdMenu } from 'react-icons/md';
+import Categorias from "./Categorias"
 
 export default function Principal(){
     const { dadosUsuario, setDadosUsuario, carregando} = useContext(UsuarioContext)
@@ -137,6 +139,8 @@ export default function Principal(){
                         <Route path="/" element={<DashBoard />}/>
                         <Route path="/dashboard" element={<DashBoard />}/>
                         <Route path="/Contas" element={<Contas />}/>
+                        <Route path="/CadContas" element={<CadContas/>}/>
+                        <Route path="/Categorias" element={<Categorias/>}/>
                     </Routes>
                 </main>
                 <div>
